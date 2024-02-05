@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-import plotly.express as px
+import matplotlib.pyplot as plt
 
 
 # Generate dataset
@@ -32,12 +32,12 @@ st.write(df.describe())
  #Show expression change between day0 and day2
 x_bar = df["subjid"]
 y_bar = df["fold_change"]
-fig = px.bar(x=x_bar, y=y_bar, labels={"x": "Samples", "y": "Expression change"}, title="HSP90 fold change btn day0 and day2")
-fig.write_html("plot1.html")
+plt.bar(x_bar, y_bar)
+plt.xlabel("Samples")
+plt.ylabel("HSP90 expression")
+plt.title("Fold change in HSP90 expression btn day0 and day2")
+plt.show()
 
-# This is used to automatically open up a browser of your plot
-import webbrowser
-webbrowser.open("plot1.html")
 #Results
 st.header("Results")
 """
@@ -49,32 +49,32 @@ numeric_df = df.select_dtypes(include=['float64', 'int64'])
 st.write(numeric_df.corr())
 
 # Plot of expression 
+
 df = pd.DataFrame({
     'subject_id': df["subjid"],
     'expression_day0': df["expression_malaria"],
     'expression_day2': df["expression_treatment"]
 })
 
-# Melt the DataFrame to convert it to long format
-df_melted = pd.melt(df, id_vars=["subject_id"], var_name="day", value_name="expression")
+# Plot the line graph using Matplotlib
+plt.plot(df['subject_id'], df['expression_day0'], label='Day 0', color='blue')
+plt.plot(df['subject_id'], df['expression_day2'], label='Day 2', color='green')
 
-# Plot the line graph using Plotly Express
-fig = px.line(df_melted, x="subject_id", y="expression", color="day",
-              color_discrete_map={"expression_day0": "blue", "expression_day2": "green"},
-              labels={"expression": "HSP90 Expression", "subject_id": "Subject ID"},
-              title="HSP90 Expression Change between Day 0 and Day 2")
-fig.write_html("plot.html")
+# Set labels and title
+plt.xlabel('Subject ID')
+plt.ylabel('Gene Expression')
+plt.title('Gene Expression Changes from Day 0 to Day 2')
 
-# Automatically open a browser of your plot                 
-import webbrowser
-webbrowser.open("plot.html")
+# Show legend
+plt.legend()
+
+# Show the plot
+plt.show()
 
 
-# Research insights
-st.header("Research Insights")
-st.write("""
-Correlation of the HSP90 expression at day 0 with admission temperature gave a correlation value of -0.0984 which shows a weak negative correlation with no statistical significance p =  0.0717 while correlation with parasitemia at admission gave a value of -0.0633 at a p value of 0.00000135 showing statistical significance (p < 0.05). This shows that parasitemia, not temperature, value may be a confident predictor for the expression of HSP90 at the febrile stage. Correlating the fold change in HSP90 expression with parasitemia at day 0 gave a correlation value of 0.1596 at a p value of 0.2951 while correlation with parasitemia after treatment(day 2) gave a coefficient of -0.0733 at a p value of 0.6324. This highlights a weak negative correlation with no statistical significance. Correlated with temperature at sampling(day 0), the fold change in HSP90 expression gave a coefficient of 0.1908 at a p value of 0.2092 showing a weak positive correlation that is not statistically significant. The change in HSP90 expression was correlated with temperature at time of sampling. Correlation of non-febrile patients gave a weak negative correlation coefficient of r = -0.1619 at a p value of 0.2880 showing no statistical significance. Correlation for febrile patients with low grade fever showed a weak positive correlation r = 0.0739 with a high p value 0.6297 indicating no statistical significance in the correlation. There was a weak positive correlation (r = 0.1751) between change in HSP90 expression and high-grade fever patients but the correlation was not statistically significant (p = 0.2500). The fold difference correlation variable showed no significant correlation with age categories. There was a very weak negative correlation between subject’s under-five years and fold difference (r = -0.0657), but the correlation was not statistically significant (p value = 0.6682). There was also a very weak positive correlation between over five years and fold difference (r = 0.0286), but the correlation was equally not statistically significant (p-value = 0.8520). Overall, the data suggests that HSP90 expression is not an ideal biomarker for antimalarial efficacy.
-""")
+
+
+
 
 
 
