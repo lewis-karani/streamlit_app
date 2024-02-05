@@ -29,14 +29,6 @@ This was a cross sectional study that focused on Plasmodium falciparum positive 
 st.header("Descriptive_statistics")
 st.write(df.describe())
  
- #Show expression change between day0 and day2
-x_bar = df["subjid"]
-y_bar = df["fold_change"]
-plt.bar(x_bar, y_bar)
-plt.xlabel("Samples")
-plt.ylabel("HSP90 expression")
-plt.title("Fold change in HSP90 expression btn day0 and day2")
-plt.show()
 
 #Results
 st.header("Results")
@@ -48,28 +40,6 @@ st.header("Correlation Matrix")
 numeric_df = df.select_dtypes(include=['float64', 'int64'])
 st.write(numeric_df.corr())
 
-# Plot of expression 
-
-df = pd.DataFrame({
-    'subject_id': df["subjid"],
-    'expression_day0': df["expression_malaria"],
-    'expression_day2': df["expression_treatment"]
-})
-
-# Plot the line graph using Matplotlib
-plt.plot(df['subject_id'], df['expression_day0'], label='Day 0', color='blue')
-plt.plot(df['subject_id'], df['expression_day2'], label='Day 2', color='green')
-
-# Set labels and title
-plt.xlabel('Subject ID')
-plt.ylabel('Gene Expression')
-plt.title('Gene Expression Changes from Day 0 to Day 2')
-
-# Show legend
-plt.legend()
-
-# Show the plot
-plt.show()
 
 
 # Research insights
